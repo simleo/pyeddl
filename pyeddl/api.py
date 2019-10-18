@@ -1,4 +1,5 @@
 import io
+import multiprocessing
 from . import _core, utils
 
 DEV_CPU = 0
@@ -72,10 +73,14 @@ def CS_FPGA(f, lsb=1):
     return _core.CompServ(0, [], f, lsb)
 
 
-def build(model, optimizer, losses, metrics, compserv):
+def build(model, optimizer, losses, metrics, compserv=None, initializer=None):
+    if compserv is None:
+        compserv = _core.CompServ(multiprocessing.cpu_count(), [], [])
+    if initializer is None:
+        initializer = _core.IGlorotUniform()
     losses = [utils.loss_func(_) for _ in losses]
     metrics = [utils.metric_func(_) for _ in metrics]
-    model.build(optimizer, losses, metrics, compserv)
+    model.build(optimizer, losses, metrics, compserv, initializer)
 
 
 def T_load(fname):

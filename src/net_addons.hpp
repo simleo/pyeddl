@@ -8,13 +8,14 @@ void net_addons(pybind11::class_<type_, options...> &cl) {
            pybind11::keep_alive<1, 2>(), pybind11::keep_alive<1, 3>());
     cl.def("summary", (std::string (Net::*)()) &Net::summary,
            "C++: Net::summary() --> string");
-    cl.def("build", (void (Net::*)(Optimizer*, vloss, vmetrics, CompServ*))
-           &Net::build,
-           "C++: Net::build(Optimizer*, vloss, vmetrics, CompServ*) --> void",
+    cl.def("build", (void (Net::*)(Optimizer*, vloss, vmetrics, CompServ*,
+                                   Initializer*)) &Net::build,
+           "C++: Net::build(Optimizer*, vloss, vmetrics, CompServ*, Initializer*) --> void",
            pybind11::arg("opt"), pybind11::arg("lo"), pybind11::arg("me"),
-           pybind11::arg("cs"), pybind11::keep_alive<1, 2>(),
-           pybind11::keep_alive<1, 3>(), pybind11::keep_alive<1, 4>(),
-           pybind11::keep_alive<1, 5>());
+           pybind11::arg("cs"), pybind11::arg("init"),
+           pybind11::keep_alive<1, 2>(), pybind11::keep_alive<1, 3>(),
+           pybind11::keep_alive<1, 4>(), pybind11::keep_alive<1, 5>(),
+           pybind11::keep_alive<1, 6>());
     cl.def("fit", (void (Net::*)(vtensor, vtensor, int, int)) &Net::fit,
            "C++: Net::fit(vtensor, vtensor, int, int) --> void",
            pybind11::arg("tin"), pybind11::arg("tout"),

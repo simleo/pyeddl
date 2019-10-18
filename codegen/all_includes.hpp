@@ -5,6 +5,7 @@
 #include <eddl/compserv.h>
 #include <eddl/losses/loss.h>
 #include <eddl/metrics/metric.h>
+#include <eddl/initializers/initializer.h>
 #include <eddl/layers/layer.h>
 #include <eddl/layers/core/layer_core.h>
 #include <eddl/layers/conv/layer_conv.h>

@@ -14,4 +14,5 @@ void lconv_addons(pybind11::class_<type_, options...> &cl) {
            pybind11::arg("name"), pybind11::arg("dev"),
            pybind11::keep_alive<1, 2>(), pybind11::keep_alive<1, 4>(),
            pybind11::keep_alive<1, 5>(), pybind11::keep_alive<1, 8>());
+    cl.def_readwrite("reg", &LConv::reg);
 }

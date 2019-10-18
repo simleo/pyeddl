@@ -7,7 +7,7 @@ import sys
 
 from pyeddl.api import (
     Input, Activation, Dense, Model, sgd, CS_CPU, build, T_load, div, fit,
-    evaluate, CS_GPU
+    evaluate, CS_GPU, BatchNormalization, L1, L2, L1L2
 )
 from pyeddl.utils import download_mnist
 
@@ -21,9 +21,15 @@ def main(args):
 
     in_ = Input([784])
     layer = in_
-    layer = Activation(Dense(layer, 1024), "relu")
-    layer = Activation(Dense(layer, 1024), "relu")
-    layer = Activation(Dense(layer, 1024), "relu")
+    layer = BatchNormalization(
+        Activation(Dense(layer, 1024, True, L1(0.01)), "relu")
+    )
+    layer = BatchNormalization(
+        Activation(Dense(layer, 1024, True, L2(0.01)), "relu")
+    )
+    layer = BatchNormalization(
+        Activation(Dense(layer, 1024, True, L1L2(0.01, 0.01)), "relu")
+    )
     out = Activation(Dense(layer, num_classes), "softmax")
     net = Model([in_], [out])
 

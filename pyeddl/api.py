@@ -35,6 +35,9 @@ __all__ = [
     "resize_model",
     "set_mode",
     "train_batch",
+    "L1",
+    "L2",
+    "L1L2",
 ]
 
 
@@ -47,8 +50,10 @@ def Activation(parent, activation, name=""):
     return _core.LActivation(parent, activation, name, DEV_CPU)
 
 
-def Dense(parent, ndim, use_bias=True, name=""):
-    return _core.LDense(parent, ndim, use_bias, name, DEV_CPU)
+def Dense(parent, ndim, use_bias=True, reg=None, name=""):
+    layer = _core.LDense(parent, ndim, use_bias, name, DEV_CPU)
+    layer.reg = reg
+    return layer
 
 
 def Model(in_, out):
@@ -121,13 +126,15 @@ def MaxPool(parent, pool_size=None, strides=None, padding="none", name=""):
 
 
 def Conv(parent, filters, kernel_size, strides=None, padding="same",
-         groups=1, dilation_rate=None, use_bias=True, name=""):
+         groups=1, dilation_rate=None, use_bias=True, reg=None, name=""):
     if strides is None:
         strides = [1, 1]
     if dilation_rate is None:
         dilation_rate = [1, 1]
-    return _core.LConv(parent, filters, kernel_size, strides, padding, groups,
-                       dilation_rate, use_bias, name, DEV_CPU)
+    layer = _core.LConv(parent, filters, kernel_size, strides, padding, groups,
+                        dilation_rate, use_bias, name, DEV_CPU)
+    layer.reg = reg
+    return layer
 
 
 def save(model, fname):
@@ -178,3 +185,16 @@ def set_mode(model, mode):
 def train_batch(model, in_, out, indices):
     model.tr_batches += 1
     model.train_batch(in_, out, indices)
+
+
+# regularizers
+def L1(l1):
+    return _core.RL1(l1)
+
+
+def L2(l2):
+    return _core.RL2(l2)
+
+
+def L1L2(l1, l2):
+    return _core.RL1L2(l1, l2)

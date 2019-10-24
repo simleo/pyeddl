@@ -19,7 +19,7 @@ def py_mse_numpy(t, y):
 def test_custom_metric():
     T = Tensor.ones([3, 4], 0)
     Y = Tensor([3, 4], 0)
-    Y.set(0.15)
+    Y.fill_(0.15)
     exp_v = MMeanSquaredError().value(T, Y)
     m = CustomMetric(py_mse, "py_mean_squared_error")
     assert pytest.approx(m.value(T, Y), exp_v)

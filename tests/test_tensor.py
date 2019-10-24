@@ -8,7 +8,7 @@ def test_array_from_tensor():
     t = Tensor(shape, DEV_CPU)
     assert t.shape == shape
     assert t.isCPU()
-    t.set(1.0)
+    t.fill_(1.0)
     a = np.array(t, copy=False)
     b = np.ones(shape, dtype=np.float32)
     assert np.array_equal(a, b)
@@ -28,7 +28,7 @@ def test_tensor_array_ops():
     incr = 2.0
     b = a + incr
     t = Tensor(list(a.shape), DEV_CPU)
-    t.set(incr)
+    t.fill_(incr)
     a += t
     assert np.array_equal(a, b)
 
@@ -402,10 +402,10 @@ def test_sum():
     assert np.sum(a) == t.sum()
 
 
-def test_sum_abs():
-    t = Tensor.range(1, 10, 1)
-    a = np.array(t, copy=True)
-    assert np.sum(np.abs(a)) == t.sum_abs()
+# def test_sum_abs():
+#     t = Tensor.range(1, 10, 1)
+#     a = np.array(t, copy=True)
+#     assert np.sum(np.abs(a)) == t.sum_abs()
 
 
 def test_tan_():

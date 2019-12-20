@@ -11,3 +11,4 @@
 #include <eddl/net/net.h>
 #include <eddl/apis/eddl.h>
 #include <eddl/apis/eddlT.h>
+#include <dummy.hpp>

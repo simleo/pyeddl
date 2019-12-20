@@ -191,6 +191,7 @@ void bind_eddl_tensor_tensor(std::function< pybind11::module &(std::string const
 #include <ios>
 #include <iterator>
 #include <memory>
+#include <net_addons.hpp>
 #include <sstream> // __str__
 #include <string>
 #include <vector>
@@ -525,6 +526,8 @@ void bind_eddl_losses_loss(std::function< pybind11::module &(std::string const &
 		cl.def("update", (void (Net::*)()) &Net::update, "C++: Net::update() --> void");
 		cl.def("compute_loss", (void (Net::*)()) &Net::compute_loss, "C++: Net::compute_loss() --> void");
 		cl.def("clamp", (void (Net::*)(float, float)) &Net::clamp, "C++: Net::clamp(float, float) --> void", pybind11::arg("min"), pybind11::arg("max"));
+
+		net_addons(cl);
 	}
 	{ // NetLoss file:eddl/net/netloss.h line:23
 		pybind11::class_<NetLoss, std::shared_ptr<NetLoss>> cl(M(""), "NetLoss", "");
@@ -995,6 +998,33 @@ void bind_eddl_apis_eddlT_1(std::function< pybind11::module &(std::string const 
 }
 
 
+// File: dummy.cpp
+#include <custom_binder.hpp>
+#include <dummy.hpp>
+#include <sstream> // __str__
+
+#include <pybind11/pybind11.h>
+#include <functional>
+#include <string>
+#include <pybind11/stl.h>
+#include <pybind11/numpy.h>
+
+
+#ifndef BINDER_PYBIND11_TYPE_CASTER
+	#define BINDER_PYBIND11_TYPE_CASTER
+	PYBIND11_DECLARE_HOLDER_TYPE(T, std::shared_ptr<T>);
+	PYBIND11_DECLARE_HOLDER_TYPE(T, T*);
+	PYBIND11_MAKE_OPAQUE(std::shared_ptr<void>);
+#endif
+
+void bind_dummy(std::function< pybind11::module &(std::string const &namespace_) > &M)
+{
+	// Dummy file:dummy.hpp line:3
+	bind_custom<pybind11::module>(M(""));
+
+}
+
+
 #include <map>
 #include <memory>
 #include <stdexcept>
@@ -1010,6 +1040,7 @@ void bind_eddl_losses_loss(std::function< pybind11::module &(std::string const &
 void bind_eddl_apis_eddl(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_eddl_apis_eddlT(std::function< pybind11::module &(std::string const &namespace_) > &M);
 void bind_eddl_apis_eddlT_1(std::function< pybind11::module &(std::string const &namespace_) > &M);
+void bind_dummy(std::function< pybind11::module &(std::string const &namespace_) > &M);
 
 
 PYBIND11_MODULE(_core, root_module) {
@@ -1037,6 +1068,7 @@ PYBIND11_MODULE(_core, root_module) {
 	bind_eddl_apis_eddl(M);
 	bind_eddl_apis_eddlT(M);
 	bind_eddl_apis_eddlT_1(M);
+	bind_dummy(M);
 
 }
 
@@ -1047,6 +1079,7 @@ PYBIND11_MODULE(_core, root_module) {
 // eddl/apis/eddl.cpp
 // eddl/apis/eddlT.cpp
 // eddl/apis/eddlT_1.cpp
+// dummy.cpp
 
 // Modules list file: /pyeddl/codegen/bindings/_core.modules
 // eddl eddlT 

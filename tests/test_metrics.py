@@ -22,7 +22,7 @@ import numpy as np
 import pytest
 import pyeddl._core.eddl as eddl
 import pyeddl._core.eddlT as eddlT
-from pyeddl._core import CustomMetric
+from pyeddl._core import getCustomMetric
 
 
 def py_mse(t, y):
@@ -42,7 +42,7 @@ def test_custom_metric():
     Y = eddlT.create([3, 4])
     eddlT.fill_(Y, 0.15)
     exp_v = eddl.getMetric("mse").value(T, Y)
-    m = CustomMetric(py_mse, "py_mse")
+    m = getCustomMetric(py_mse, "py_mse")
     assert pytest.approx(m.value(T, Y), exp_v)
-    m2 = CustomMetric(py_mse_numpy, "py_mse")
+    m2 = getCustomMetric(py_mse_numpy, "py_mse")
     assert pytest.approx(m2.value(T, Y), exp_v)

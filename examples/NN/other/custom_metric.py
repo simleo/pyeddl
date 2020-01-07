@@ -27,7 +27,7 @@ import sys
 
 import pyeddl._core.eddl as eddl
 import pyeddl._core.eddlT as eddlT
-from pyeddl._core import CustomMetric
+from pyeddl._core import getCustomMetric
 
 
 def py_mse(t, y):
@@ -50,7 +50,7 @@ def main(args):
     out = eddl.Dense(layer, 784)
 
     net = eddl.Model([in_], [out])
-    mse = CustomMetric(py_mse, "py_mean_squared_error")
+    mse = getCustomMetric(py_mse, "py_mean_squared_error")
 
     net.build(
         eddl.sgd(0.001, 0.9),

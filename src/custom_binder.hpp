@@ -42,10 +42,16 @@ float CustomMetric::value(Tensor *T, Tensor *Y) {
 }
 
 
+CustomMetric* getCustomMetric(pybind11::object pymetric, std::string name) {
+    return new CustomMetric(pymetric, name);
+}
+
+
 template<typename Module>
 void bind_custom(Module &m) {
     pybind11::class_<CustomMetric, std::shared_ptr<CustomMetric>, Metric>
       cl(m, "CustomMetric");
     cl.def(pybind11::init<pybind11::object, std::string>());
     cl.def("value", &CustomMetric::value);
+    m.def("getCustomMetric", &getCustomMetric, "getCustomMetric(pymetric, name) --> CustomMetric", pybind11::return_value_policy::reference, pybind11::keep_alive<0, 1>());
 }
